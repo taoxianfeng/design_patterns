@@ -1,5 +1,11 @@
 #!/usr/bin/python3
 # -*- coding: utf-8 -*-
+"""
+module name: proxy proto design pattern
+module description: 
+Authors: taoxianfeng(taoxianfeng2012@163.com)
+Date:    2020/08/09
+"""
 
 from abc import ABC, abstractmethod
 
@@ -36,8 +42,17 @@ class Proxy(Subject):
         self._suject.request()
         self._after()
     
+class Client():
+    def __init__(self):
+        pass
+
+    def excute(self):
+        subject = RealSubject(topic = "init proxy topic")
+        proxy  = Proxy(subject= subject)
+        proxy.request()
+
 
 if __name__ == "__main__":
-    subject = RealSubject(topic = "init proxy topic")
-    proxy  = Proxy(subject= subject)
-    proxy.request()
+    client = Client()
+    client.excute()
+ 
