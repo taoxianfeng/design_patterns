@@ -4,8 +4,6 @@
 module name: proxy proto design pattern
 module description: 
 普通代理模式对外暴露的接口仅是代理类
-用户层仅需要初始化代理后，调用代理类的方法可执行对应执行步骤
-此处相当于代理类重新封装了业务类，通过代理类初始化业务类，执行业务类的业务，整体的输入与输出未改变
 Authors: taoxianfeng(taoxianfeng2012@163.com)
 Date:    2020/08/09
 """
@@ -19,66 +17,60 @@ class IGamePlayer(ABC):
         pass
 
     @abstractmethod
-    def killboss(self):
-        pass
-
-    @abstractmethod
-    def update(self):
+    def killskill(self):
         pass
 
 
 class GamePlayer(IGamePlayer):
-    def __init__(self, gameplayer: IGamePlayer, name: str):
+    def __init__(self, name: str, passwd: str):
         self._name = name
-        if gameplayer:
-            self._gameplayer = gameplayer
-        else:
-            raise Exception("Do not creat real user")
-        print(" class name : {}".format(self.__class__.__name__))
+        self._passwd = passwd
+        self._play_mode = True
+        self._proxy = None
+        self.login(name=name, passwd=passwd)
+        # print(" class name : {}".format(self.__class__.__name__))
 
     def login(self, name: str, passwd: str):
         print("user: {}  log in successful".format(name))
-    
 
-    def killboss(self):
-        print("user: {} is killing boss ".format(
+    def killskill(self):
+        print("使用{}".format(
             sys._getframe().f_code.co_name))
-
-    def update(self):
-        print("user: {} is updating".format(sys._getframe().f_code.co_name))
 
 
 class GameplayerProxy(IGamePlayer):
-    def __init__(self, name: str):
+    def __init__(self, name: str, passwd: str, realname: str):
         try:
             #  将self para  init class GamePlayer
             self._name = name
-            self._gameplayer = GamePlayer(self, name)
+            print("请输入realusers输入登录密码")
+            realuserpasswd = input()
+            self._gameplayer = GamePlayer(realname, realuserpasswd)
 
         except Exception as e:
             print("init {} invalid,exception: {}".format(
                 self.__class__.__name__, e))
 
-    def killboss(self):
-        self._gameplayer.killboss()
+    def killskill(self):
+        self._gameplayer.killskill()
+
+    def proxylogin(self, name: str, passwd: str):
+        print("{} successful".format(
+            sys._getframe().f_code.co_name))
 
     def login(self, name: str, passwd: str):
         self._gameplayer.login(name=name, passwd=passwd)
 
-    def update(self):
-        self._gameplayer.update()
-
 
 class Client():
+    """
+    代理角色找到真实的角色
+    """
     @staticmethod
-    def excute(name: str):
-        proxy = GameplayerProxy(name=name)
-        from datetime import datetime
-        print("begin time : {}".format(datetime.now()))
-        proxy.login(name=name, passwd='123456')
-        proxy.killboss()
-        proxy.update()
+    def excute():
+        proxy = GameplayerProxy(name="Alice", passwd="123456", realname="tony")
+        proxy.killskill()
 
 
 if __name__ == "__main__":
-    Client.excute(name="taoxianfeng")
+    Client.excute()
