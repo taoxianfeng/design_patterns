@@ -3,7 +3,7 @@
 """
 module name:force proxy design pattern
 module description:
-普通代理模式对外暴露的接口仅是真实用户类，由真实用户指定代理用户
+强制代理模式对外暴露的接口仅是真实用户类，由真实用户指定代理用户
 Authors: taoxianfeng(taoxianfeng2012@163.com)
 Date:    2020/08/09
 
