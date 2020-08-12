@@ -1,20 +1,47 @@
-# https://blog.csdn.net/water_likud/article/details/80566177
+'''
+Description: 
+    code from https://blog.csdn.net/water_likud/article/details/80566177
+    1. 对代理对象进行调用时，代理对象转发调用给实际对象本身
+    2. 
+Version: 1.0
+Autor: 木瓜
+Date: 2020-08-11 23:29:46
+'''
+
 from types import MethodType
 
 class HandlerException(Exception):
     def __init__(self, cls):
+        '''
+        @description: 
+        @param: 
+            cls:
+        @return: {}
+        @author: 木瓜
+        '''
         super(HandlerException, self).__init__(cls, 'is not a hanlder class')
 
 
 class ProxyFactory:
     def __init__(self, hcls):
+        '''
+        @description: 
+        @param: {hcls:被装饰类的处理器类型}
+        @return: {}
+        @author: 木瓜
+        ''' 
         if issubclass(hcls, InvocationHandler) or hcls is InvocationHandler:
             self.hcls = hcls
         else:
             raise HandlerException(hcls)
 
     def __call__(self, cls):
-
+        '''
+        @description: 
+        @param: {}
+        @return: {}
+        @author: 木瓜
+        '''
         return Proxy(cls, self.hcls)
 
 
