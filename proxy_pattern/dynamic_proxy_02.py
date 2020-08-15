@@ -10,6 +10,7 @@ Date: 2020-08-11 23:29:46
 
 from types import MethodType
 
+
 class HandlerException(Exception):
     def __init__(self, cls):
         '''
@@ -22,6 +23,16 @@ class HandlerException(Exception):
         super(HandlerException, self).__init__(cls, 'is not a hanlder class')
 
 
+class InvocationHandler:
+    def __init__(self, obj, func):
+        self.obj = obj
+        self.func = func
+
+    def __call__(self, *args, **kwargs):
+        print('handler:', self.func, args, kwargs)
+        return self.func(*args, **kwargs)
+
+
 class ProxyFactory:
     def __init__(self, hcls):
         '''
@@ -29,7 +40,7 @@ class ProxyFactory:
         @param: {hcls:被装饰类的处理器类型}
         @return: {}
         @author: 木瓜
-        ''' 
+        '''
         if issubclass(hcls, InvocationHandler) or hcls is InvocationHandler:
             self.hcls = hcls
         else:
@@ -38,7 +49,7 @@ class ProxyFactory:
     def __call__(self, cls):
         '''
         @description: 
-        @param: {}
+        @param: {cls:被装饰类的类型}
         @return: {}
         @author: 木瓜
         '''
@@ -70,16 +81,6 @@ class Proxy:
         return res
 
 
-class InvocationHandler:
-    def __init__(self, obj, func):
-        self.obj = obj
-        self.func = func
-
-    def __call__(self, *args, **kwargs):
-        print('handler:', self.func, args, kwargs)
-        return self.func(*args, **kwargs)
-
-
 @ProxyFactory(InvocationHandler)
 class Sample:
     def __init__(self, age):
@@ -91,8 +92,9 @@ class Sample:
     def add(self, x, y):
         return x + y
 
+
 if __name__ == "__main__":
-    # import pdb 
+    # import pdb
     # pdb.set_trace()
     s = Sample(12)
     print(type(s))
